@@ -44,4 +44,26 @@ public interface Queue<E> {
 	 */
 	public E back() throws UnderflowException;
 	
+	// exercicio 4
+	public boolean contains(E element);
+	
+	//exercicio 5
+	public void flip();
+	
+	// exercicio 6
+	public void enqueue(Queue<E> fila);
+	
+	// exercicio 7
+	public void enqueueWithPriority(E element);
+	
+	// exercicio 8
+	public boolean equals(Queue<E> fila);
+	
+	
+	
+	
+	public void copy(Queue<E> fila);
+	
+	
+	
 }

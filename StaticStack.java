@@ -81,5 +81,5 @@ public class StaticStack<E> implements Stack<E> {
 			s += "\n]";
 			return s;
 		}
-	}
+	}	
 }

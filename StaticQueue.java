@@ -1,5 +1,7 @@
 package bibliotecaClasses;
 
+import java.util.Arrays;
+
 public class StaticQueue<E> implements Queue<E> {
 
 	//indice para o primeiro elemento
@@ -140,14 +142,109 @@ public class StaticQueue<E> implements Queue<E> {
 				aux.enqueue(q.dequeue());
 		}
 		while(!aux.isEmpty()) q.enqueue(aux.dequeue());
-		/*while(!q.isEmpty()) {
-			char temp = q.dequeue();
-			if(temp != element)
-				aux.enqueue(temp);
-		}
-		while(!aux.isEmpty())
-			q.enqueue(aux.dequeue());*/
 	}
+	
+	
+	// Exercicio 4
+	public boolean contains(E element) throws IllegalArgumentException{
+		if(element == null) throw new IllegalArgumentException();
+		Queue<E> aux = new StaticQueue<>(this.numElements());		
+		boolean achou = false;
+		while(!this.isEmpty()) {
+			E temp = this.dequeue();
+			aux.enqueue(temp);
+			if(temp.equals(element)) {
+				achou = true;
+				break;
+			}
+		}
+		while(!this.isEmpty())
+			aux.enqueue(this.dequeue());
+		while(!aux.isEmpty())
+			this.enqueue(aux.dequeue());
+				
+		return achou;
+	}
+	
+	// exercicio 5 
+	public void flip() {		
+		Stack<E> pilha = new StaticStack<>(this.numElements());
+		while(!this.isEmpty())
+			pilha.push(this.dequeue());
+		while(!pilha.isEmpty())
+			this.enqueue(pilha.pop());	
+	}
+	
+	
+	// exercicio 6
+	public void enqueue(Queue<E> fila) throws OverflowException {
+		if (isFull())
+			throw new OverflowException();
+		else {			
+			Queue<E> aux = new StaticQueue(this.numElements()+fila.numElements());
+			
+			while(!this.isEmpty())
+				aux.enqueue(this.dequeue());
+			
+			while(!fila.isEmpty())
+				aux.enqueue(fila.dequeue());
+			
+			while(!aux.isEmpty())
+				this.enqueue(aux.dequeue());			
+		}
+	}
+	
+	// exercicio 7
+	public void enqueueWithPriority(E element) throws OverflowException {
+		if(isFull())
+			throw new OverflowException();
+		else {
+			Queue<E> aux = new StaticQueue(this.numElements()+1);
+			aux.enqueue(element);
+			while(!this.isEmpty())
+				aux.enqueue(this.dequeue());
+			while(!aux.isEmpty())
+				this.enqueue(aux.dequeue());
+		}		
+	}
+	
+	// exercicio 8
+	public boolean equals(Queue<E> fila) {
+		
+		Queue<E> aux = new StaticQueue<>(this.numElements());
+		Queue<E> aux2 = new StaticQueue<>(fila.numElements());
+		boolean igual = false;
+		
+		while(!this.isEmpty()) {
+			if(!this.front().equals(fila.front())) {
+				igual = false;
+				break;				
+			}else {
+				aux.enqueue(this.dequeue());
+				igual = true;
+			}
+		}
+		while(!this.isEmpty())
+			aux.enqueue(this.dequeue());
+		//while()
+		
+		return igual;
+	}
+	
+	
+	public void copy(Queue<E> fila){
+		Queue<E> aux = new StaticQueue(this.numElements());
+		while(!this.isEmpty()) {
+			aux.enqueue(this.dequeue());
+			fila.enqueue(aux.front());
+		}
+		while(!aux.isEmpty()) {
+			System.out.println(aux.front());
+			this.enqueue(aux.dequeue());					
+		}		
+	}
+	
+	
 	
 	
 	
@@ -165,35 +262,19 @@ public class StaticQueue<E> implements Queue<E> {
 			return s;
 		}
 	}
-	
-	public static void main (String [] args) {
-		
-		//Queue<Integer> exe1 = new StaticQueue<>(8);
-		//exe1.enqueue(1); exe1.enqueue(2); exe1.enqueue(3); exe1.enqueue(4); 
-		//System.out.println(exe1.toString());
-		//System.out.println(exe1.isFull() ? true : false);
-		//System.out.println(((StaticQueue<Integer>) exe1).isFullNoMod() ? true : false);
-		
-		//Queue<Integer> exe2 = new StaticQueue<>(8);
-		//exe2.enqueue(5); exe2.enqueue(6); exe2.enqueue(7); exe2.enqueue(8);
-		
-		/*System.out.println(exe1.toString());
-		System.out.println(exe2.toString());
-		
-		((StaticQueue<Integer>) exe1).prependQueue(exe1, exe2);
-		
-		System.out.println(exe1.toString());
-		System.out.println(exe2.toString());*/
-		
-		// exercicio 3
-		Queue<Character> exe3 = new StaticQueue<>(4);
-		exe3.enqueue('a'); exe3.enqueue('b'); exe3.enqueue('b'); exe3.enqueue('c');
-		System.out.println(exe3.toString());
-		((StaticQueue<Character>)exe3).exterminateFromQueue(exe3, 'b');
-		System.out.println(exe3.toString());
-		
-		
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		StaticQueue other = (StaticQueue) obj;
+		if (!Arrays.deepEquals(elements, other.elements))
+			return false;
+		return true;
 	}
-	
 	
 }
